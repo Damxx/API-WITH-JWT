@@ -1,6 +1,7 @@
 package outh.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +30,13 @@ public class Words {
         return wordService.addWord(jsonWord);
     }
 
+    @GetMapping("/getListCategories/{page}")
+    public ResponseEntity<List<WordCategory>> getAllCategories(@PathVariable("page") int page) {
+        Page<WordCategory> pages = wordService.getAllWordCategoryPageable(page-1);
+        int totalPages = pages.getTotalPages();
+        int currentPage = pages.getNumber();
+        List<WordCategory> wordCategoryList = pages.getContent();
 
-    @GetMapping("/getListCategories")
-    public ResponseEntity<List<WordCategory>> getAllCategories() {
         List<WordCategory> wordCategory = wordService.getAllCategories();
         return ResponseEntity.ok(wordCategory);
     }

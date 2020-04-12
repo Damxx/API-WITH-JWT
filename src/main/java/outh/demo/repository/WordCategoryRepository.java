@@ -1,5 +1,7 @@
 package outh.demo.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import outh.demo.model.WordCategory;
@@ -15,5 +17,6 @@ public interface WordCategoryRepository extends CrudRepository<WordCategory, Lon
     //WordCategory getWordCategoriesByIdCategory(Integer idCategory);
     WordCategory getWordCategoryByIdCategory(Long idCategory);
 
+    Page<WordCategory> findAll(Pageable pageable);
 
 }

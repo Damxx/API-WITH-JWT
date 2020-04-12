@@ -14,7 +14,7 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/users")
-public class HomeController {
+public class UserController {
 
     private UserRepository applicationUserRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -23,7 +23,7 @@ public class HomeController {
     @Autowired
     private UserProgressService userProgressService;
 
-    public HomeController(UserRepository applicationUserRepository,
+    public UserController(UserRepository applicationUserRepository,
                           BCryptPasswordEncoder bCryptPasswordEncoder,
                           UserService userService) {
         this.applicationUserRepository = applicationUserRepository;
@@ -33,34 +33,24 @@ public class HomeController {
 
     @PostMapping("/sign-up")
     public boolean signUp(@RequestBody UserApplication userApplication) {
-        if(applicationUserRepository.existsByUsernameOrEmail(userApplication.getUsername(),userApplication.getEmail())){
+        if (applicationUserRepository.existsByUsernameOrEmail(userApplication.getUsername(), userApplication.getEmail())) {
             return false;
         }
         userService.saveUser(userApplication);
         return true;
     }
-    @GetMapping("/test1")
-    public String testOne(){
-        return "test";
-    }
 
-    @GetMapping("/test2")
-    public String testTwo(){
-        return "test2";
+    @PostMapping("/addexperience/{exp}")
+    public boolean addexperience(Principal principal, @PathVariable("exp") int experience) {
+        UserApplication userApplication = applicationUserRepository.findByUsername(principal.getName());
+        userProgressService.addExperience(userApplication, experience);
+        return true;
     }
 
     @GetMapping("/test3")
-    public String testThree(Authentication authentication, Principal principal){
+    public String testThree(Authentication authentication, Principal principal) {
         System.out.println(authentication.toString());
         UserApplication userApplication = applicationUserRepository.findByUsername(principal.getName());
         return "three";
     }
-
-    @PostMapping("/addexperience/{exp}")
-    public boolean addexperience(Principal principal,@PathVariable("exp") int experience){
-        UserApplication userApplication = applicationUserRepository.findByUsername(principal.getName());
-        userProgressService.addExperience(userApplication,experience);
-        return true;
-    }
-
 }

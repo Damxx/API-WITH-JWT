@@ -1,6 +1,8 @@
 package outh.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import outh.demo.model.Word;
 import outh.demo.model.WordCategory;
@@ -66,5 +68,12 @@ public class WordService {
         }
 
         return allWordSelectedByCategories;
+    }
+
+
+    public Page<WordCategory> getAllWordCategoryPageable(int page){
+        int elements = 2;
+        Page<WordCategory> wordCategoriesPages = wordCategoryRepository.findAll(PageRequest.of(page,elements));
+        return wordCategoriesPages;
     }
 }
